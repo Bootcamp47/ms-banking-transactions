@@ -16,6 +16,7 @@ public class Transaction {
 
     @Id
     private String id;
+    private String customerId;
     private String purchaseId;
     private String source;
     private String transactionType;

@@ -49,6 +49,7 @@ public class TransactionService implements TransactionsApiDelegate {
         Transaction transaction = Transaction
                 .builder()
                 .id(transactionDTO.getId())
+                .customerId(transactionDTO.getCustomerId())
                 .purchaseId(transactionDTO.getPurchaseId())
                 .source(transactionDTO.getSource())
                 .transactionType(transactionDTO.getTransactionType())
@@ -57,6 +58,7 @@ public class TransactionService implements TransactionsApiDelegate {
                 .state(transactionDTO.getState())
                 .build();
         transactionRepository.save(transaction);
+        transactionDTO.setId(transaction.getId());
         transactionDTO.setCreatedAt(new Date().toString());
         return ResponseEntity.ok(transactionDTO);
     }
@@ -81,9 +83,21 @@ public class TransactionService implements TransactionsApiDelegate {
         return transactionFound.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.ok(new TransactionDTO()));
     }
 
+    @Override
+    public ResponseEntity<List<TransactionDTO>> retrieveCustomerPurchaseMovements(String customerId, String purchaseId) {
+        List<Transaction> transactions = transactionRepository.getAllByCustomerIdAndPurchaseId(customerId, purchaseId);
+        List<TransactionDTO> transactionDTOList =
+                transactions
+                        .stream()
+                        .map(this::createDTO)
+                        .collect(Collectors.toList());
+        return new ResponseEntity<>(transactionDTOList, HttpStatus.OK);
+    }
+
     private TransactionDTO createDTO(Transaction transaction) {
         TransactionDTO transactionDTO = new TransactionDTO();
         transactionDTO.setId(transaction.getId());
+        transactionDTO.setCustomerId(transaction.getCustomerId());
         transactionDTO.setPurchaseId(transaction.getPurchaseId());
         transactionDTO.setSource(transaction.getSource());
         transactionDTO.setTransactionType(transaction.getTransactionType());
