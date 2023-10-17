@@ -15,8 +15,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 public class Transaction {
 
     @Id
-    private Long id;
-    private Long purchaseId;
+    private String id;
+    private String purchaseId;
     private String source;
     private String transactionType;
     private String createdAt;

@@ -33,7 +33,7 @@ public class TransactionService implements TransactionsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<TransactionDTO> retrieveTransaction(Long id) {
+    public ResponseEntity<TransactionDTO> retrieveTransaction(String id) {
         List<Transaction> transactions = transactionRepository.findAll();
         Optional<TransactionDTO> transactionFound =
                 transactions
@@ -67,7 +67,7 @@ public class TransactionService implements TransactionsApiDelegate {
     }
 
     @Override
-    public ResponseEntity<TransactionDTO> deleteTransaction(Long id) {
+    public ResponseEntity<TransactionDTO> deleteTransaction(String id) {
         List<Transaction> transactions = transactionRepository.findAll();
         Optional<TransactionDTO> transactionFound =
                 transactions
